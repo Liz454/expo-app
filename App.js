@@ -1,78 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import axios from "axios";
 import Textinput from "./components/Textinput"
 import { StyleSheet, Text, View, TextInput, SafeAreaView } from 'react-native';
 
 export default function App() {
+  const [countryData, setCountryData] = useState(true);
 
-  const [verb, setVerb] = React.useState("eat");
-  const [sentence, setSentence] = React.useState("");
+  async function makeRequest() {
+    const options = {
+      method: 'GET',
+      url: 'https://covid-19-data.p.rapidapi.com/country',
+      params: {name: 'italy'},
+      headers: {
+        'x-rapidapi-host': 'covid-19-data.p.rapidapi.com',
+        'x-rapidapi-key': 'be9785e489msh02d495b3ba35ee6p1ece69jsn89807faa5db5'
+      }
+    };
+    let res = await axios(options)
+    setCountryData(res.data[0])
+    console.log(countryData);
+  }
 
-  const styles = StyleSheet.create({
-    input: {
-      height: 40,
-      margin: 12,
-      //color: '#fff',
-      borderWidth: 1,
-      //borderColor: '#fff',
-      borderRadius: 5,
-      padding: 10
-    },
-    text: {
-      //color: '#fff'
-    },
-    container: {
-      flex: 1,
-      //backgroundColor: '#333',
-      //color: '#fff',
-      alignItems: 'center',
-      padding: 20
-      //justifyContent: 'center',
-    },
-  });
+  makeRequest();
   
-  var options = {
-    method: 'GET',
-    url: 'https://linguatools-sentence-generating.p.rapidapi.com/realise',
-    params: {
-      object: 'thief',
-      subject: 'cat',
-      verb: verb,
-      perfect: 'perfect',
-      tense: 'past'
-    },
-    headers: {
-      'x-rapidapi-key': '2875a4121fmsh98d7b4af12bc90cp11a95ejsnf915df3b87e3',
-      'x-rapidapi-host': 'linguatools-sentence-generating.p.rapidapi.com'
-    }
-  };
 
-  axios.request(options).then(function (response) {
-    console.log(response);
-    setSentence(response.data.sentence);
-  }).catch(function (error) {
-    console.error("APP HAS ERRORED", error);
-  });
-
+  let country = countryData.country
+  let confirmed = countryData.confirmed
+  console.log(country, confirmed)
 
   return (
     <View style={styles.container}>
       <SafeAreaView>
+      <Text>Hello world</Text>
+      </SafeAreaView>
 
 
-        <TextInput
-          style={styles.input}
-          onChangeText={verb => setVerb(verb)}
-          value={verb}
-        />
-
-        <Text style={styles.text}>Sentence: {sentence}</Text>
-
-        {/* <Text style={{padding: 10, fontSize: 42}}>
-          {types.map((type) => <Text>{type}{"\n"}</Text>)}
-        </Text> */}
-
+      <SafeAreaView>
+      <Text>Today in {country} there is a total of {confirmed} cases</Text>
       </SafeAreaView>
       
       <StatusBar style="auto" />
