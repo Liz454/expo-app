@@ -14,7 +14,7 @@ export default function App() {
       params: {name: 'italy'},
       headers: {
         'x-rapidapi-host': 'covid-19-data.p.rapidapi.com',
-        'x-rapidapi-key': 'be9785e489msh02d495b3ba35ee6p1ece69jsn89807faa5db5'
+        'x-rapidapi-key': ''
       }
     };
     let res = await axios(options)
